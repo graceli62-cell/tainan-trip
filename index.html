@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#31483a">
+  <title>原食森林｜台南兩天一夜</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #26382f;
+      --muted: #68766d;
+      --paper: #f8f5ec;
+      --card: #fffdf7;
+      --accent: #b66a46;
+      --accent-soft: #f4e6d6;
+      --green: #49634e;
+      --line: #e8e0d2;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    .page { width: min(100% - 32px, 680px); margin: 0 auto; padding: 22px 0 52px; }
+    .hero {
+      min-height: min(88svh, 720px);
+      position: relative;
+      isolation: isolate;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+      padding: 34px 27px;
+      border-radius: 30px;
+      color: #fffaf0;
+      background:
+        radial-gradient(ellipse 24% 42% at 52% 21%, rgba(255, 241, 184, .95) 0%, rgba(255, 220, 144, .52) 28%, transparent 76%),
+        radial-gradient(ellipse 37% 80% at 49% 16%, rgba(247, 222, 155, .30), transparent 70%),
+        linear-gradient(180deg, #a6bb91 0%, #809578 30%, #61755d 58%, #34493b 100%);
+      box-shadow: 0 15px 45px rgba(47, 61, 45, .17);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: -5%;
+      background:
+        radial-gradient(ellipse at 5% 1%, #253d30 0 13%, transparent 13.5%),
+        radial-gradient(ellipse at 22% -4%, #314d38 0 15%, transparent 15.5%),
+        radial-gradient(ellipse at 91% -5%, #263e31 0 17%, transparent 17.5%),
+        radial-gradient(ellipse at 71% 4%, #3d5840 0 13%, transparent 13.5%),
+        linear-gradient(103deg, transparent 0 37%, rgba(255, 227, 157, .24) 38% 40%, transparent 42%),
+        linear-gradient(76deg, transparent 0 57%, rgba(255, 235, 183, .20) 58% 60%, transparent 62%);
+      filter: blur(1px);
+      opacity: .96;
+    }
+    .sunwash {
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      left: 50%;
+      width: 65%;
+      height: 86%;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse at center 22%, rgba(255, 248, 213, .65), rgba(255, 225, 157, .22) 35%, rgba(255, 222, 156, .08) 52%, transparent 72%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; text-shadow: 0 2px 18px rgba(22, 37, 28, .35); }
+    .eyebrow { margin: 0 0 8px; color: #f5e8c8; font-size: 13px; font-weight: 750; letter-spacing: .2em; }
+    h1 { margin: 0; font-size: clamp(43px, 11vw, 62px); line-height: 1.16; letter-spacing: .07em; }
+    .subtitle { margin: 11px 0 0; color: #fff9ed; font-size: 16px; letter-spacing: .05em; }
+    .hero-caption { margin: 22px 0 0; color: rgba(255, 250, 240, .78); font-size: 13px; letter-spacing: .12em; }
+    .note { margin: 19px 2px 27px; padding: 12px 15px; border-radius: 14px; background: var(--accent-soft); color: #714b34; font-size: 14px; }
+    .day { margin-top: 27px; }
+    .day-heading { display: flex; align-items: baseline; gap: 10px; margin: 0 2px 13px; }
+    .day-number { color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: .12em; }
+    h2 { margin: 0; font-size: 24px; letter-spacing: .03em; }
+    .stops { display: grid; gap: 11px; }
+    .stop { display: grid; grid-template-columns: 70px 1fr; gap: 13px; padding: 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--card); box-shadow: 0 3px 12px rgba(56, 48, 34, .035); }
+    .time { align-self: start; padding: 5px 7px; border-radius: 10px; background: #edf1e9; color: var(--green); text-align: center; font-size: 14px; font-weight: 800; line-height: 1.4; font-variant-numeric: tabular-nums; }
+    .place { margin: 0; font-size: 18px; line-height: 1.4; font-weight: 750; }
+    .kind { display: inline-block; margin-left: 5px; color: var(--muted); font-size: 12px; font-weight: 500; }
+    .desc { margin: 5px 0 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+    footer { margin-top: 29px; padding: 17px 4px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width: 380px) {
+      .page { width: min(100% - 24px, 680px); padding-top: 12px; }
+      .hero { min-height: 80svh; padding: 28px 21px; border-radius: 25px; }
+      .stop { grid-template-columns: 64px 1fr; gap: 10px; padding: 14px 12px; }
+      .place { font-size: 17px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <span class="sunwash" aria-hidden="true"></span>
+      <div class="hero-content">
+        <p class="eyebrow">一段慢下來的旅程</p>
+        <h1>原食森林</h1>
+        <p class="subtitle">台南兩天一夜・和好友慢慢走</p>
+        <p class="hero-caption">讓晨光帶路，讓日子回到舒服的節奏</p>
+      </div>
+    </header>
+
+    <p class="note">行程中的店名與時間目前都是示意，出發前再換成實際安排。</p>
+
+    <section class="day" aria-labelledby="day-one">
+      <div class="day-heading"><span class="day-number">DAY 01</span><h2 id="day-one">老城散步・小吃巡禮</h2></div>
+      <div class="stops">
+        <article class="stop"><time class="time">10:00</time><div><h3 class="place">阿霞飯店 <span class="kind">午餐・示意店名</span></h3><p class="desc">先用一桌台南家常好味道開場，大家一起分享招牌菜。</p></div></article>
+        <article class="stop"><time class="time">12:30</time><div><h3 class="place">孔廟文化園區 <span class="kind">散步・景點</span></h3><p class="desc">走進老樹與紅牆之間，感受府城悠閒的午後氣氛。</p></div></article>
+        <article class="stop"><time class="time">15:00</time><div><h3 class="place">巷口冬瓜茶 <span class="kind">下午茶・示意店名</span></h3><p class="desc">找間小店坐下來喝杯清涼飲料，補充散步的能量。</p></div></article>
+        <article class="stop"><time class="time">18:00</time><div><h3 class="place">海安路小食堂 <span class="kind">晚餐・示意店名</span></h3><p class="desc">晚餐安排在熱鬧街區，吃飽後再一起逛逛街景與小店。</p></div></article>
+      </div>
+    </section>
+
+    <section class="day" aria-labelledby="day-two">
+      <div class="day-heading"><span class="day-number">DAY 02</span><h2 id="day-two">市場早晨・海風收尾</h2></div>
+      <div class="stops">
+        <article class="stop"><time class="time">08:30</time><div><h3 class="place">永樂市場早點 <span class="kind">早餐・示意店名</span></h3><p class="desc">挑幾樣在地早餐小吃分著吃，感受市場早晨的熱鬧。</p></div></article>
+        <article class="stop"><time class="time">10:30</time><div><h3 class="place">安平古堡 <span class="kind">景點</span></h3><p class="desc">到老城區走走看看，從古蹟和巷弄認識安平故事。</p></div></article>
+        <article class="stop"><time class="time">13:00</time><div><h3 class="place">安平豆花舖 <span class="kind">甜點・示意店名</span></h3><p class="desc">來碗冰涼甜品休息一下，讓午後行程多一點甜味。</p></div></article>
+        <article class="stop"><time class="time">15:00</time><div><h3 class="place">漁光島海邊 <span class="kind">散步・景點</span></h3><p class="desc">吹吹海風、拍張合照，替兩天的小旅行留下輕鬆句點。</p></div></article>
+      </div>
+    </section>
+
+    <footer>時間為行程示意，實際停留與交通請依當天狀況調整。</footer>
+  </main>
+</body>
+</html>
+
