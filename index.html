@@ -48,26 +48,12 @@
       border-radius: 30px;
       color: #fffaf0;
       background:
-        radial-gradient(ellipse 24% 42% at 52% 21%, rgba(255, 241, 184, .95) 0%, rgba(255, 220, 144, .52) 28%, transparent 76%),
-        radial-gradient(ellipse 37% 80% at 49% 16%, rgba(247, 222, 155, .30), transparent 70%),
-        linear-gradient(180deg, #a6bb91 0%, #809578 30%, #61755d 58%, #34493b 100%);
+        linear-gradient(90deg, rgba(28, 38, 32, .48) 0%, rgba(28, 38, 32, .25) 38%, transparent 74%),
+        linear-gradient(0deg, rgba(24, 34, 28, .58) 0%, transparent 62%),
+        url("tainan-cover.png") center 48% / cover no-repeat;
       box-shadow: 0 15px 45px rgba(47, 61, 45, .17);
     }
-    .hero::before {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      inset: -5%;
-      background:
-        radial-gradient(ellipse at 5% 1%, #253d30 0 13%, transparent 13.5%),
-        radial-gradient(ellipse at 22% -4%, #314d38 0 15%, transparent 15.5%),
-        radial-gradient(ellipse at 91% -5%, #263e31 0 17%, transparent 17.5%),
-        radial-gradient(ellipse at 71% 4%, #3d5840 0 13%, transparent 13.5%),
-        linear-gradient(103deg, transparent 0 37%, rgba(255, 227, 157, .24) 38% 40%, transparent 42%),
-        linear-gradient(76deg, transparent 0 57%, rgba(255, 235, 183, .20) 58% 60%, transparent 62%);
-      filter: blur(1px);
-      opacity: .96;
-    }
+    .hero::before { content: none; }
     .sunwash {
       position: absolute;
       z-index: -1;
@@ -79,6 +65,7 @@
       background: radial-gradient(ellipse at center 22%, rgba(255, 248, 213, .65), rgba(255, 225, 157, .22) 35%, rgba(255, 222, 156, .08) 52%, transparent 72%);
       pointer-events: none;
     }
+    .sunwash { display: none; }
     .hero-content { position: relative; z-index: 1; text-shadow: 0 2px 18px rgba(22, 37, 28, .35); }
     .eyebrow { margin: 0 0 8px; color: #f5e8c8; font-size: 13px; font-weight: 750; letter-spacing: .2em; }
     h1 { margin: 0; font-size: clamp(43px, 11vw, 62px); line-height: 1.16; letter-spacing: .07em; }
