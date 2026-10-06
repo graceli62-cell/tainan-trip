@@ -15,14 +15,17 @@
   <style>
     :root {
       color-scheme: light;
-      --ink: #26382f;
-      --muted: #68766d;
-      --paper: #f8f5ec;
-      --card: #fffdf7;
-      --accent: #b66a46;
-      --accent-soft: #f4e6d6;
-      --green: #49634e;
-      --line: #e8e0d2;
+      --main-color: #A44F32;
+      --light-background: #FFF4E1;
+      --dark-text: #30271E;
+      --ink: var(--dark-text);
+      --muted: var(--dark-text);
+      --paper: var(--light-background);
+      --card: var(--light-background);
+      --accent: var(--main-color);
+      --accent-soft: color-mix(in srgb, var(--main-color) 12%, var(--light-background));
+      --green: var(--main-color);
+      --line: color-mix(in srgb, var(--dark-text) 18%, var(--light-background));
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -30,12 +33,27 @@
       margin: 0;
       background: var(--paper);
       color: var(--ink);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
       font-size: 17px;
       line-height: 1.7;
       -webkit-font-smoothing: antialiased;
     }
     .page { width: min(100% - 32px, 680px); margin: 0 auto; padding: 22px 0 52px; }
+    .auth-panel { width: min(100%, 440px); margin: 8vh auto; padding: 28px; border: 1px solid var(--line); border-radius: 24px; background: var(--card); box-shadow: 0 12px 36px color-mix(in srgb, var(--dark-text) 10%, transparent); }
+    .auth-panel h1 { margin: 0; font-size: 30px; letter-spacing: .04em; }
+    .auth-panel p { margin: 10px 0 20px; color: var(--muted); }
+    .auth-form { display: grid; gap: 13px; }
+    .auth-form label { display: grid; gap: 5px; font-size: 15px; font-weight: 700; }
+    .auth-form input { width: 100%; padding: 12px 13px; border: 1px solid var(--line); border-radius: 11px; background: white; color: var(--ink); font: inherit; }
+    .auth-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 3px; }
+    .auth-actions button, .signout-button { padding: 11px 14px; border: 0; border-radius: 11px; background: var(--accent); color: white; font: inherit; font-weight: 750; cursor: pointer; }
+    .auth-actions button[type="button"] { background: var(--dark-text); }
+    .auth-actions button:disabled { opacity: .65; cursor: wait; }
+    .auth-message { min-height: 1.6em; margin: 13px 0 0 !important; font-size: 14px; }
+    .auth-message[data-error="true"] { color: #a12622; }
+    .session-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 2px 18px; font-size: 14px; }
+    .session-bar .signout-button { padding: 7px 12px; font-size: 14px; }
+    [hidden] { display: none !important; }
     .hero {
       min-height: min(88svh, 720px);
       position: relative;
@@ -46,47 +64,50 @@
       overflow: hidden;
       padding: 34px 27px;
       border-radius: 30px;
-      color: #fffaf0;
+      color: var(--dark-text);
       background:
-        linear-gradient(90deg, rgba(28, 38, 32, .48) 0%, rgba(28, 38, 32, .25) 38%, transparent 74%),
-        linear-gradient(0deg, rgba(24, 34, 28, .58) 0%, transparent 62%),
+        linear-gradient(90deg, color-mix(in srgb, var(--light-background) 48%, transparent) 0%, color-mix(in srgb, var(--light-background) 34%, transparent) 38%, transparent 74%),
+        linear-gradient(0deg, color-mix(in srgb, var(--light-background) 18%, transparent) 0%, transparent 62%),
         url("tainan-cover.png") center 48% / cover no-repeat;
-      box-shadow: 0 15px 45px rgba(47, 61, 45, .17);
+      box-shadow: 0 15px 45px color-mix(in srgb, var(--dark-text) 17%, transparent);
     }
     .hero::before { content: none; }
-    .sunwash {
-      position: absolute;
-      z-index: -1;
-      top: 0;
-      left: 50%;
-      width: 65%;
-      height: 86%;
-      transform: translateX(-50%);
-      background: radial-gradient(ellipse at center 22%, rgba(255, 248, 213, .65), rgba(255, 225, 157, .22) 35%, rgba(255, 222, 156, .08) 52%, transparent 72%);
-      pointer-events: none;
-    }
     .sunwash { display: none; }
-    .hero-content { position: relative; z-index: 1; text-shadow: 0 2px 18px rgba(22, 37, 28, .35); }
-    .eyebrow { margin: 0 0 8px; color: #f5e8c8; font-size: 13px; font-weight: 750; letter-spacing: .2em; }
+    .hero-content { position: relative; z-index: 1; text-shadow: 0 2px 18px color-mix(in srgb, var(--light-background) 88%, transparent); }
+    .eyebrow { margin: 0 0 8px; color: var(--dark-text); font-size: 16px; font-weight: 750; letter-spacing: .2em; }
+    h1, h2, .place { font-family: "Songti TC", "PMingLiU", "Noto Serif TC", "Times New Roman", serif; }
     h1 { margin: 0; font-size: clamp(43px, 11vw, 62px); line-height: 1.16; letter-spacing: .07em; }
-    .subtitle { margin: 11px 0 0; color: #fff9ed; font-size: 16px; letter-spacing: .05em; }
-    .hero-caption { margin: 22px 0 0; color: rgba(255, 250, 240, .78); font-size: 13px; letter-spacing: .12em; }
-    .note { margin: 19px 2px 27px; padding: 12px 15px; border-radius: 14px; background: var(--accent-soft); color: #714b34; font-size: 14px; }
+    .subtitle { margin: 11px 0 0; color: var(--dark-text); font-size: 17px; letter-spacing: .05em; }
+    .hero-caption { margin: 22px 0 0; color: color-mix(in srgb, var(--dark-text) 82%, transparent); font-size: 16px; letter-spacing: .12em; }
+    .note { margin: 19px 2px 27px; padding: 12px 15px; border-radius: 14px; background: var(--accent-soft); color: var(--dark-text); font-size: 17px; line-height: 1.7; }
     .meetup { margin: 16px 2px 0; color: var(--green); font-size: 17px; font-weight: 700; }
     .qr-card { margin-top: 30px; padding: 22px 18px; border: 1px solid var(--line); border-radius: 20px; background: var(--card); text-align: center; }
     .qr-card p { margin: 0 0 12px; color: var(--green); font-weight: 750; }
     .qr-card img { display: block; width: min(220px, 70vw); height: auto; margin: 0 auto; }
     .day { margin-top: 27px; }
     .day-heading { display: flex; align-items: baseline; gap: 10px; margin: 0 2px 13px; }
-    .day-number { color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: .12em; }
+    .day-number { color: var(--accent); font-size: 16px; font-weight: 800; letter-spacing: .12em; }
     h2 { margin: 0; font-size: 24px; letter-spacing: .03em; }
     .stops { display: grid; gap: 11px; }
-    .stop { display: grid; grid-template-columns: 70px 1fr; gap: 13px; padding: 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--card); box-shadow: 0 3px 12px rgba(56, 48, 34, .035); }
-    .time { align-self: start; padding: 5px 7px; border-radius: 10px; background: #edf1e9; color: var(--green); text-align: center; font-size: 14px; font-weight: 800; line-height: 1.4; font-variant-numeric: tabular-nums; }
+    .stop { display: grid; grid-template-columns: 70px 1fr; gap: 13px; padding: 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--card); box-shadow: 0 3px 12px color-mix(in srgb, var(--dark-text) 4%, transparent); }
+    .time { align-self: start; padding: 5px 7px; border-radius: 10px; background: var(--accent-soft); color: var(--green); text-align: center; font-size: 17px; font-weight: 800; line-height: 1.7; font-variant-numeric: tabular-nums; }
     .place { margin: 0; font-size: 18px; line-height: 1.4; font-weight: 750; }
-    .kind { display: inline-block; margin-left: 5px; color: var(--muted); font-size: 12px; font-weight: 500; }
-    .desc { margin: 5px 0 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
-    footer { margin-top: 29px; padding: 17px 4px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; text-align: center; }
+    .kind { display: inline-block; margin-left: 5px; color: var(--muted); font-size: 15px; font-weight: 500; }
+    .desc { margin: 5px 0 0; color: var(--muted); font-size: 17px; line-height: 1.7; }
+    .vote-card { margin-top: 27px; padding: 22px 18px; border: 1px solid var(--line); border-radius: 20px; background: var(--card); }
+    .vote-card h2 { margin: 0 0 5px; }
+    .vote-intro { margin: 0 0 14px; color: var(--muted); }
+    .vote-form { display: grid; gap: 11px; }
+    .vote-form label { display: grid; gap: 5px; font-size: 15px; font-weight: 700; }
+    .vote-form input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 11px; background: white; color: var(--ink); font: inherit; }
+    .vote-form button { padding: 11px 14px; border: 0; border-radius: 11px; background: var(--accent); color: white; font: inherit; font-weight: 750; cursor: pointer; }
+    .vote-form button:disabled { opacity: .65; cursor: wait; }
+    .vote-status { min-height: 1.5em; margin: 8px 0 0; font-size: 14px; }
+    .vote-status[data-error="true"] { color: #a12622; }
+    .vote-results { display: grid; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+    .vote-results li { display: flex; justify-content: space-between; gap: 12px; padding: 9px 11px; border-radius: 10px; background: var(--accent-soft); }
+    .vote-results .vote-count { flex: 0 0 auto; color: var(--accent); font-weight: 800; font-variant-numeric: tabular-nums; }
+    footer { margin-top: 29px; padding: 17px 4px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 16px; text-align: center; }
     @media (max-width: 380px) {
       .page { width: min(100% - 24px, 680px); padding-top: 12px; }
       .hero { min-height: 80svh; padding: 28px 21px; border-radius: 25px; }
@@ -97,7 +118,22 @@
   </style>
 </head>
 <body>
-  <main class="page">
+  <main id="auth-gate" class="auth-panel" aria-labelledby="auth-title">
+    <h1 id="auth-title">好友行程登入</h1>
+    <p>登入後即可查看台南兩天一夜行程。新朋友可用電子郵件建立帳號。</p>
+    <form id="auth-form" class="auth-form">
+      <label>電子郵件<input id="auth-email" name="email" type="email" autocomplete="email" required></label>
+      <label>密碼<input id="auth-password" name="password" type="password" autocomplete="current-password" minlength="6" required></label>
+      <div class="auth-actions">
+        <button id="sign-in" type="submit">登入</button>
+        <button id="sign-up" type="button">建立帳號</button>
+      </div>
+    </form>
+    <p id="auth-message" class="auth-message" role="status" aria-live="polite"></p>
+  </main>
+
+  <main id="trip-content" class="page" hidden>
+    <div class="session-bar"><span id="signed-in-as"></span><button id="sign-out" class="signout-button" type="button">登出</button></div>
     <header class="hero">
       <span class="sunwash" aria-hidden="true"></span>
       <div class="hero-content">
@@ -131,6 +167,20 @@
       </div>
     </section>
 
+    <section class="vote-card" aria-labelledby="dinner-vote-heading">
+      <h2 id="dinner-vote-heading">晚餐投票</h2>
+      <p class="vote-intro">填上暱稱和想選的晚餐，看看大家的選擇。</p>
+      <form id="vote-form" class="vote-form">
+        <label for="vote-nickname">暱稱</label>
+        <input id="vote-nickname" name="nickname" type="text" maxlength="40" autocomplete="nickname" required>
+        <label for="vote-choice">晚餐選項</label>
+        <input id="vote-choice" name="choice" type="text" maxlength="100" required>
+        <button id="vote-submit" type="submit">送出一票</button>
+      </form>
+      <p id="vote-status" class="vote-status" role="status" aria-live="polite"></p>
+      <ul id="vote-results" class="vote-results" aria-label="各晚餐選項票數"></ul>
+    </section>
+
     <section class="qr-card" aria-label="網站 QR 碼">
       <p>分享行程，掃描 QR 碼開啟網站</p>
       <img src="tainan-trip-qr.png" alt="原食森林台南行程網站 QR 碼" width="1000" height="1000" loading="lazy">
@@ -138,6 +188,148 @@
 
     <footer>時間為行程示意，實際停留與交通請依當天狀況調整。</footer>
   </main>
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.0';
+
+    const supabasePoll = createClient(
+      'https://pnmklylgivajekvtmabr.supabase.co',
+      'sb_publishable_LTq6nYC0Hd5XO66ICUOsyA_OkVpUiQ2'
+    );
+    const voteForm = document.querySelector('#vote-form');
+    const voteNickname = document.querySelector('#vote-nickname');
+    const voteChoice = document.querySelector('#vote-choice');
+    const voteSubmit = document.querySelector('#vote-submit');
+    const voteStatus = document.querySelector('#vote-status');
+    const voteResults = document.querySelector('#vote-results');
+
+    function setVoteStatus(text, isError = false) {
+      voteStatus.textContent = text;
+      voteStatus.dataset.error = String(isError);
+    }
+
+    async function refreshVoteResults() {
+      const { data, error } = await supabasePoll
+        .from('dinner_votes')
+        .select('choice');
+
+      if (error) {
+        setVoteStatus('目前無法載入票數，請稍後再試。', true);
+        return;
+      }
+
+      const counts = new Map();
+      for (const { choice } of data) counts.set(choice, (counts.get(choice) ?? 0) + 1);
+      const rankedChoices = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'zh-Hant'));
+      voteResults.replaceChildren();
+
+      if (rankedChoices.length === 0) {
+        const empty = document.createElement('li');
+        empty.textContent = '還沒有投票，歡迎投下第一票。';
+        voteResults.append(empty);
+        return;
+      }
+
+      for (const [choice, count] of rankedChoices) {
+        const item = document.createElement('li');
+        const label = document.createElement('span');
+        const total = document.createElement('span');
+        label.textContent = choice;
+        total.className = 'vote-count';
+        total.textContent = `${count} 票`;
+        item.append(label, total);
+        voteResults.append(item);
+      }
+    }
+
+    voteForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      voteSubmit.disabled = true;
+      setVoteStatus('正在送出…');
+      const nickname = voteNickname.value.trim();
+      const choice = voteChoice.value.trim();
+      const { error } = await supabasePoll.from('dinner_votes').insert({ nickname, choice });
+
+      if (error) {
+        setVoteStatus('投票未成功，請稍後再試。', true);
+      } else {
+        setVoteStatus('投票成功，謝謝參與。');
+        voteForm.reset();
+        await refreshVoteResults();
+      }
+      voteSubmit.disabled = false;
+    });
+
+    refreshVoteResults();
+    window.setInterval(refreshVoteResults, 15000);
+
+    const SUPABASE_URL = 'https://mxtwdozprxcjhsqgtllw.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_v2VboC0IfRp68CjwoLXZwg_RjWIpPTR';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    const gate = document.querySelector('#auth-gate');
+    const trip = document.querySelector('#trip-content');
+    const form = document.querySelector('#auth-form');
+    const emailInput = document.querySelector('#auth-email');
+    const passwordInput = document.querySelector('#auth-password');
+    const message = document.querySelector('#auth-message');
+    const signInButton = document.querySelector('#sign-in');
+    const signUpButton = document.querySelector('#sign-up');
+    const signOutButton = document.querySelector('#sign-out');
+
+    function showMessage(text, isError = false) {
+      message.textContent = text;
+      message.dataset.error = String(isError);
+    }
+
+    function renderSession(session) {
+      const signedIn = Boolean(session?.user);
+      gate.hidden = signedIn;
+      trip.hidden = !signedIn;
+      document.querySelector('#signed-in-as').textContent = signedIn ? `已登入：${session.user.email}` : '';
+      if (!signedIn) showMessage('');
+    }
+
+    function credentials() {
+      return { email: emailInput.value.trim(), password: passwordInput.value };
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      signInButton.disabled = true;
+      signUpButton.disabled = true;
+      showMessage('正在登入…');
+      const { error } = await supabase.auth.signInWithPassword(credentials());
+      if (error) showMessage(error.message, true);
+      signInButton.disabled = false;
+      signUpButton.disabled = false;
+    });
+
+    signUpButton.addEventListener('click', async () => {
+      if (!form.reportValidity()) return;
+      signInButton.disabled = true;
+      signUpButton.disabled = true;
+      showMessage('正在建立帳號…');
+      const { data, error } = await supabase.auth.signUp({
+        ...credentials(),
+        options: { emailRedirectTo: window.location.href.split('#')[0] },
+      });
+      if (error) showMessage(error.message, true);
+      else if (data.session) showMessage('帳號建立成功，已登入。');
+      else showMessage('請檢查電子郵件並完成驗證，再回到此頁登入。');
+      signInButton.disabled = false;
+      signUpButton.disabled = false;
+    });
+
+    signOutButton.addEventListener('click', async () => {
+      signOutButton.disabled = true;
+      const { error } = await supabase.auth.signOut();
+      if (error) showMessage(error.message, true);
+      signOutButton.disabled = false;
+    });
+
+    const { data: { session }, error } = await supabase.auth.getSession();
+    if (error) showMessage(error.message, true);
+    renderSession(session);
+    supabase.auth.onAuthStateChange((_event, nextSession) => renderSession(nextSession));
+  </script>
 </body>
 </html>
-
