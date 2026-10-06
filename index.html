@@ -49,6 +49,8 @@
     .auth-actions button, .signout-button { padding: 11px 14px; border: 0; border-radius: 11px; background: var(--accent); color: white; font: inherit; font-weight: 750; cursor: pointer; }
     .auth-actions button[type="button"] { background: var(--dark-text); }
     .auth-actions button:disabled { opacity: .65; cursor: wait; }
+    #reset-password { justify-self: start; padding: 4px 0; border: 0; background: transparent; color: var(--accent); font: inherit; text-decoration: underline; cursor: pointer; }
+    #reset-password:disabled { opacity: .65; cursor: wait; }
     .auth-message { min-height: 1.6em; margin: 13px 0 0 !important; font-size: 14px; }
     .auth-message[data-error="true"] { color: #a12622; }
     .session-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 2px 18px; font-size: 14px; }
@@ -130,6 +132,11 @@
         <button id="sign-in" type="submit">登入</button>
         <button id="sign-up" type="button">建立帳號</button>
       </div>
+      <button id="reset-password" type="button">忘記密碼</button>
+    </form>
+    <form id="recovery-form" class="auth-form" hidden>
+      <label>新密碼<input id="new-password" name="new-password" type="password" autocomplete="new-password" minlength="6" required></label>
+      <button id="save-password" class="signout-button" type="submit">更新密碼</button>
     </form>
     <p id="auth-message" class="auth-message" role="status" aria-live="polite"></p>
   </main>
@@ -354,7 +361,12 @@
     const message = document.querySelector('#auth-message');
     const signInButton = document.querySelector('#sign-in');
     const signUpButton = document.querySelector('#sign-up');
+    const resetPasswordButton = document.querySelector('#reset-password');
+    const recoveryForm = document.querySelector('#recovery-form');
+    const newPasswordInput = document.querySelector('#new-password');
+    const savePasswordButton = document.querySelector('#save-password');
     const signOutButton = document.querySelector('#sign-out');
+    let recoveryMode = new URLSearchParams(window.location.hash.slice(1)).get('type') === 'recovery';
 
     function showMessage(text, isError = false) {
       message.textContent = text;
@@ -362,6 +374,15 @@
     }
 
     function renderSession(session) {
+      if (recoveryMode) {
+        gate.hidden = false;
+        trip.hidden = true;
+        form.hidden = true;
+        recoveryForm.hidden = false;
+        return;
+      }
+      form.hidden = false;
+      recoveryForm.hidden = true;
       const signedIn = Boolean(session?.user);
       gate.hidden = signedIn;
       trip.hidden = !signedIn;
@@ -400,6 +421,35 @@
       signUpButton.disabled = false;
     });
 
+    resetPasswordButton.addEventListener('click', async () => {
+      if (!emailInput.reportValidity()) return;
+      resetPasswordButton.disabled = true;
+      showMessage('正在寄送密碼重設信…');
+      const { error } = await supabase.auth.resetPasswordForEmail(emailInput.value.trim(), {
+        redirectTo: window.location.href.split('#')[0],
+      });
+      if (error) showMessage(error.message, true);
+      else showMessage('如果這個信箱有帳號，密碼重設連結已寄出；請查看收件匣與垃圾郵件。');
+      resetPasswordButton.disabled = false;
+    });
+
+    recoveryForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      savePasswordButton.disabled = true;
+      showMessage('正在更新密碼…');
+      const { error } = await supabase.auth.updateUser({ password: newPasswordInput.value });
+      if (error) {
+        showMessage(error.message, true);
+      } else {
+        recoveryMode = false;
+        newPasswordInput.value = '';
+        const { data: { session: updatedSession } } = await supabase.auth.getSession();
+        renderSession(updatedSession);
+        showMessage('密碼已更新。');
+      }
+      savePasswordButton.disabled = false;
+    });
+
     signOutButton.addEventListener('click', async () => {
       signOutButton.disabled = true;
       const { error } = await supabase.auth.signOut();
@@ -410,7 +460,11 @@
     const { data: { session }, error } = await supabase.auth.getSession();
     if (error) showMessage(error.message, true);
     renderSession(session);
-    supabase.auth.onAuthStateChange((_event, nextSession) => renderSession(nextSession));
+    supabase.auth.onAuthStateChange((event, nextSession) => {
+      if (event === 'PASSWORD_RECOVERY') recoveryMode = true;
+      if (event === 'SIGNED_OUT') recoveryMode = false;
+      renderSession(nextSession);
+    });
   </script>
 </body>
 </html>
