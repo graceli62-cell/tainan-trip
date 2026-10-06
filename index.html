@@ -78,6 +78,10 @@
     .subtitle { margin: 11px 0 0; color: #fff9ed; font-size: 16px; letter-spacing: .05em; }
     .hero-caption { margin: 22px 0 0; color: rgba(255, 250, 240, .78); font-size: 13px; letter-spacing: .12em; }
     .note { margin: 19px 2px 27px; padding: 12px 15px; border-radius: 14px; background: var(--accent-soft); color: #714b34; font-size: 14px; }
+    .meetup { margin: 16px 2px 0; color: var(--green); font-size: 17px; font-weight: 700; }
+    .qr-card { margin-top: 30px; padding: 22px 18px; border: 1px solid var(--line); border-radius: 20px; background: var(--card); text-align: center; }
+    .qr-card p { margin: 0 0 12px; color: var(--green); font-weight: 750; }
+    .qr-card img { display: block; width: min(220px, 70vw); height: auto; margin: 0 auto; }
     .day { margin-top: 27px; }
     .day-heading { display: flex; align-items: baseline; gap: 10px; margin: 0 2px 13px; }
     .day-number { color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: .12em; }
@@ -110,6 +114,7 @@
       </div>
     </header>
 
+    <p class="meetup">集合地點：台北火車站</p>
     <p class="note">行程中的店名與時間目前都是示意，出發前再換成實際安排。</p>
 
     <section class="day" aria-labelledby="day-one">
@@ -130,6 +135,11 @@
         <article class="stop"><time class="time">13:00</time><div><h3 class="place">安平豆花舖 <span class="kind">甜點・示意店名</span></h3><p class="desc">來碗冰涼甜品休息一下，讓午後行程多一點甜味。</p></div></article>
         <article class="stop"><time class="time">15:00</time><div><h3 class="place">漁光島海邊 <span class="kind">散步・景點</span></h3><p class="desc">吹吹海風、拍張合照，替兩天的小旅行留下輕鬆句點。</p></div></article>
       </div>
+    </section>
+
+    <section class="qr-card" aria-label="網站 QR 碼">
+      <p>分享行程，掃描 QR 碼開啟網站</p>
+      <img src="tainan-trip-qr.png" alt="原食森林台南行程網站 QR 碼" width="1000" height="1000" loading="lazy">
     </section>
 
     <footer>時間為行程示意，實際停留與交通請依當天狀況調整。</footer>
